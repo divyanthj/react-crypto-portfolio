@@ -7,9 +7,10 @@ import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
-// import TextField from '@mate
 import MenuItem from '@material-ui/core/MenuItem';
 import TextField from '@material-ui/core/TextField';
+import CircularProgress from '@material-ui/core/CircularProgress';
+import purple from '@material-ui/core/colors/purple';
 
 
 const styles = theme => ({
@@ -28,6 +29,14 @@ const styles = theme => ({
 
 function SimpleTable(props) {
   const { classes } = props;
+
+  /*
+    Show loading spinner instead of table while data is being fetched
+  */
+
+  if(props.isLoading) {
+    return (<CircularProgress className={classes.progress} />)
+  }
 
   return (
     <Paper className={classes.root}>

@@ -8,6 +8,7 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      loading: true,
       conversion: null,
       coinData: [],
       coinColumns:[
@@ -27,6 +28,10 @@ class App extends Component {
     this.fetchData();
   }
 
+  /*
+    Handler for detecting changes to portfolio
+  */
+
   handlePortfolioChange(value, symbol) {
     let portfolio = this.state.portfolio;
     portfolio[symbol] = value;
@@ -36,6 +41,10 @@ class App extends Component {
     this.updateLocalStorage();
     this.getTotal();
   }
+
+  /*
+    Calculate total portfolio Value
+  */
 
   getTotal() {
     let total = 0;
@@ -48,6 +57,10 @@ class App extends Component {
     })
   }
 
+  /*
+    Update local storage with current portfolio
+  */
+
   updateLocalStorage() {
     let keys = Object.keys(this.state.portfolio);
     keys.forEach((key) => {
@@ -56,7 +69,9 @@ class App extends Component {
   }
 
 
-
+  /*
+    Fetch Coin data and conversion data from API
+  */
 
   fetchData() {
     axios.get('https://pro-api.coinmarketcap.com/v1/cryptocurrency/listings/latest', {
@@ -70,21 +85,28 @@ class App extends Component {
       }
     }).then((res) => {
         let data = res.data
+        // CoinmarketCap API didn't support INR conversions in the free version. So, getting current USD-INR value from another API
         axios.get('https://free.currencyconverterapi.com/api/v6/convert?q=USD_INR&compact=ultra', {
           method: 'GET'
         }).then((res) => {
           this.setState({
-            conversion: res.data.USD_INR
+            conversion: res.data.USD_INR,
+            loading: false
           });
           this.makeData(data);
         }, () => {
           this.setState({
-            conversion: 69
+            conversion: 69,
+            loading: false
           });
           this.makeData(data);
         })
     })
   }
+
+  /*
+    Reorganize data for the app
+  */
 
   makeData(coins) {
     let coinData = [];
@@ -106,14 +128,14 @@ class App extends Component {
     this.getTotal();
   }
 
-
-
   render() {
-    return (<Table coinData={this.state.coinData}
-                   coinColumns={this.state.coinColumns}
-                   portfolio={this.state.portfolio}
-                   handlePortfolioChange={this.handlePortfolioChange.bind(this)}
-                   totalValue={this.state.totalValue}></Table>)
+    return (
+      <Table isLoading={this.state.loading}
+             coinData={this.state.coinData}
+             coinColumns={this.state.coinColumns}
+             portfolio={this.state.portfolio}
+             handlePortfolioChange={this.handlePortfolioChange.bind(this)}
+             totalValue={this.state.totalValue}></Table>)
   }
 }
 
