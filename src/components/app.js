@@ -2,18 +2,40 @@ import React, { Component } from 'react'
 import axios from 'axios';
 import api from '../data/api-keys'
 import _ from 'lodash'
+import Table from './table.js'
 
 class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
       conversion: null,
-      coins: []
+      coinData: [],
+      coinColumns:[
+        'Rank',
+        'Name (Symbol)',
+        'Circulating Supply',
+        'Price (INR)',
+        'My Holdings',
+        'My Holdings Value (INR)'
+      ],
+      portfolio: {}
     };
   }
 
   componentDidMount() {
     this.fetchData();
+  }
+
+  handlePortfolioChange(value, symbol) {
+    let portfolio = this.state.portfolio;
+    portfolio[symbol] = value;
+    this.setState({
+      portfolio: portfolio
+    });
+    let keys = Object.keys(this.state.portfolio);
+    keys.forEach((key) => {
+      localStorage.setItem(key, this.state.portfolio[key]);
+    });
   }
 
 
@@ -22,7 +44,7 @@ class App extends Component {
     axios.get('https://pro-api.coinmarketcap.com/v1/cryptocurrency/listings/latest', {
       method: 'GET',
       params: {
-        limit: 50
+        limit: 5
       },
       headers: {
         'X-CMC_PRO_API_KEY': api.key,
@@ -48,6 +70,7 @@ class App extends Component {
 
   makeData(coins) {
     let coinData = [];
+    let portfolio = {};
     coins.data.forEach((coin) => {
       coinData.push({
         name: coin.name,
@@ -55,21 +78,19 @@ class App extends Component {
         symbol: coin.symbol,
         rank: coin.cmc_rank,
         price: coin.quote.USD.price * this.state.conversion
-      })
+      });
+      portfolio[coin.symbol] = localStorage.getItem(coin.symbol) || 0;
     });
     this.setState({
-      coins: coinData
+      coinData: coinData,
+      portfolio: portfolio
     });
   }
 
 
 
   render() {
-
-
-    return (<div>
-        Hello wprld
-      </div>)
+    return (<Table coinData={this.state.coinData} coinColumns={this.state.coinColumns} portfolio={this.state.portfolio} handlePortfolioChange={this.handlePortfolioChange.bind(this)}></Table>)
   }
 }
 

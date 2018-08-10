@@ -1,7 +1,7 @@
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const path = require('path');
 
-const appTitle = 'Finleap TEst';
+const appTitle = 'React Portfolio test';
 const filePath = path.join(__dirname, 'src','index.js');
 const PORT = '8080';
 
