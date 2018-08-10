@@ -45,11 +45,11 @@ function SimpleTable(props) {
           {props.coinData.map(n => {
             return (
               <TableRow>
-                <TableCell numeric>{n.rank}</TableCell>
-                <TableCell numeric>{n.name} ({n.symbol})</TableCell>
-                <TableCell numeric>{n.circulating_supply}</TableCell>
-                <TableCell numeric>{n.price.toFixed(2)}</TableCell>
-                <TableCell numeric>
+                <TableCell>{n.rank}</TableCell>
+                <TableCell>{n.name} ({n.symbol})</TableCell>
+                <TableCell>{n.circulating_supply}</TableCell>
+                <TableCell>{n.price.toFixed(2)}</TableCell>
+                <TableCell>
                 <TextField
                   id="number"
                   value={props.portfolio[n.symbol]}
@@ -62,10 +62,20 @@ function SimpleTable(props) {
                   margin="normal"
                 />
                 </TableCell>
-                <TableCell numeric>{(props.portfolio[n.symbol] * n.price).toFixed(2)}</TableCell>
+                <TableCell>{(props.portfolio[n.symbol] * n.price).toFixed(2)}</TableCell>
               </TableRow>
             );
           })}
+          <TableRow>
+            <TableCell>Total Portfolio Value</TableCell>
+            <TableCell></TableCell>
+            <TableCell></TableCell>
+            <TableCell></TableCell>
+            <TableCell></TableCell>
+            <TableCell variant='footer'>
+               <h3>{props.totalValue}</h3>
+            </TableCell>
+          </TableRow>
         </TableBody>
       </Table>
     </Paper>

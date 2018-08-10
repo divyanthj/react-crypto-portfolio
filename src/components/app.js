@@ -18,7 +18,8 @@ class App extends Component {
         'My Holdings',
         'My Holdings Value (INR)'
       ],
-      portfolio: {}
+      portfolio: {},
+      totalValue: 0
     };
   }
 
@@ -32,11 +33,28 @@ class App extends Component {
     this.setState({
       portfolio: portfolio
     });
+    this.updateLocalStorage();
+    this.getTotal();
+  }
+
+  getTotal() {
+    let total = 0;
+    this.state.coinData.forEach((coin) => {
+      total += coin.price * this.state.portfolio[coin.symbol];
+    })
+    console.log("Total", total);
+    this.setState({
+      totalValue: total.toFixed(2)
+    })
+  }
+
+  updateLocalStorage() {
     let keys = Object.keys(this.state.portfolio);
     keys.forEach((key) => {
       localStorage.setItem(key, this.state.portfolio[key]);
     });
   }
+
 
 
 
@@ -85,12 +103,17 @@ class App extends Component {
       coinData: coinData,
       portfolio: portfolio
     });
+    this.getTotal();
   }
 
 
 
   render() {
-    return (<Table coinData={this.state.coinData} coinColumns={this.state.coinColumns} portfolio={this.state.portfolio} handlePortfolioChange={this.handlePortfolioChange.bind(this)}></Table>)
+    return (<Table coinData={this.state.coinData}
+                   coinColumns={this.state.coinColumns}
+                   portfolio={this.state.portfolio}
+                   handlePortfolioChange={this.handlePortfolioChange.bind(this)}
+                   totalValue={this.state.totalValue}></Table>)
   }
 }
 
