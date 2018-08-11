@@ -11,6 +11,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import TextField from '@material-ui/core/TextField';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import purple from '@material-ui/core/colors/purple';
+import Typography from '@material-ui/core/Typography';
 
 
 const styles = theme => ({
@@ -36,6 +37,21 @@ function SimpleTable(props) {
 
   if(props.isLoading) {
     return (<CircularProgress className={classes.progress} />)
+  }
+
+  /*
+    Display Error message if Coinmarketcap API fails
+  */
+
+  if(props.isError) {
+    return (<Paper>
+              <Typography variant="headline" component="h3">
+                Error!
+              </Typography>
+              <Typography component="p">
+                Unable to fetch data
+              </Typography>
+            </Paper>)
   }
 
   return (

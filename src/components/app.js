@@ -9,6 +9,7 @@ class App extends Component {
     super(props);
     this.state = {
       loading: true,
+      error: false,
       conversion: null,
       coinData: [],
       coinColumns:[
@@ -84,24 +85,32 @@ class App extends Component {
         'Content-Type': 'application/jsonp',
       }
     }).then((res) => {
+        // Success response for CoinmarketCap API
         let data = res.data
         // CoinmarketCap API didn't support INR conversions in the free version. So, getting current USD-INR value from another API
         axios.get('https://free.currencyconverterapi.com/api/v6/convert?q=USD_INR&compact=ultra', {
           method: 'GET'
         }).then((res) => {
+          // Success response for USD/INR conversion API
           this.setState({
             conversion: res.data.USD_INR,
             loading: false
           });
           this.makeData(data);
         }, () => {
+          // Failure response for USD/INR conversion API
           this.setState({
             conversion: 69,
             loading: false
           });
           this.makeData(data);
         })
-    })
+    }, (res) => {
+      this.setState({
+        loading: false,
+        error: true
+      })
+    });
   }
 
   /*
@@ -131,6 +140,7 @@ class App extends Component {
   render() {
     return (
       <Table isLoading={this.state.loading}
+             isError={this.state.error}
              coinData={this.state.coinData}
              coinColumns={this.state.coinColumns}
              portfolio={this.state.portfolio}
