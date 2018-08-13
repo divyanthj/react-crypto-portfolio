@@ -73,7 +73,7 @@ function SimpleTable(props) {
               <TableRow>
                 <TableCell>{n.rank}</TableCell>
                 <TableCell>{n.name} ({n.symbol})</TableCell>
-                <TableCell>{format.numberWithCommas(n.circulating_supply)}</TableCell>
+                <TableCell>{format.numberWithCommas(n.circulating_supply.toFixed(2))}</TableCell>
                 <TableCell>{format.numberWithCommas(n.price.toFixed(2))}</TableCell>
                 <TableCell>
                 <TextField
