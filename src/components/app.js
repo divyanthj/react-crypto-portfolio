@@ -78,7 +78,7 @@ class App extends Component {
     axios.get('https://cors-anywhere.herokuapp.com/https://pro-api.coinmarketcap.com/v1/cryptocurrency/listings/latest', {
       method: 'GET',
       params: {
-        limit: 5
+        // limit: 10
       },
       headers: {
         'X-CMC_PRO_API_KEY': api.key
