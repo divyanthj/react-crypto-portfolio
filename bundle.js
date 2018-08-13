@@ -27721,7 +27721,7 @@ var App = function (_Component) {
       _axios2.default.get('https://cors-anywhere.herokuapp.com/https://pro-api.coinmarketcap.com/v1/cryptocurrency/listings/latest', {
         method: 'GET',
         params: {
-          limit: 5
+          // limit: 10
         },
         headers: {
           'X-CMC_PRO_API_KEY': _apiKeys2.default.key
@@ -45908,6 +45908,10 @@ var _Typography = __webpack_require__(271);
 
 var _Typography2 = _interopRequireDefault(_Typography);
 
+var _format = __webpack_require__(273);
+
+var _format2 = _interopRequireDefault(_format);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var styles = function styles(theme) {
@@ -45999,12 +46003,12 @@ function SimpleTable(props) {
             _react2.default.createElement(
               _TableCell2.default,
               null,
-              n.circulating_supply
+              _format2.default.numberWithCommas(n.circulating_supply.toFixed(2))
             ),
             _react2.default.createElement(
               _TableCell2.default,
               null,
-              n.price.toFixed(2)
+              _format2.default.numberWithCommas(n.price.toFixed(2))
             ),
             _react2.default.createElement(
               _TableCell2.default,
@@ -46026,7 +46030,7 @@ function SimpleTable(props) {
             _react2.default.createElement(
               _TableCell2.default,
               null,
-              (props.portfolio[n.symbol] * n.price).toFixed(2)
+              _format2.default.numberWithCommas((props.portfolio[n.symbol] * n.price).toFixed(2))
             )
           );
         }),
@@ -46048,7 +46052,7 @@ function SimpleTable(props) {
             _react2.default.createElement(
               'h3',
               null,
-              props.totalValue
+              _format2.default.numberWithCommas(props.totalValue)
             )
           )
         )
@@ -61003,6 +61007,44 @@ var _default = (0, _withStyles.default)(styles, {
 
 exports.default = _default;
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1)))
+
+/***/ }),
+/* 273 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = {
+  numberWithCommas: function numberWithCommas(nStr) {
+    nStr += '';
+    var x = nStr.split('.');
+    var x1 = x[0];
+    var x2 = x.length > 1 ? '.' + x[1] : '';
+    var rgx = /(\d+)(\d{3})/;
+    var z = 0;
+    var len = String(x1).length;
+    var num = parseInt(len / 2 - 1);
+
+    while (rgx.test(x1)) {
+      if (z > 0) {
+        x1 = x1.replace(rgx, '$1' + ',' + '$2');
+      } else {
+        x1 = x1.replace(rgx, '$1' + ',' + '$2');
+        rgx = /(\d+)(\d{2})/;
+      }
+      z++;
+      num--;
+      if (num == 0) {
+        break;
+      }
+    }
+    return x1 + x2;
+  }
+};
 
 /***/ })
 /******/ ]);
