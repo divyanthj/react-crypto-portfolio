@@ -12,6 +12,7 @@ import TextField from '@material-ui/core/TextField';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import purple from '@material-ui/core/colors/purple';
 import Typography from '@material-ui/core/Typography';
+import format from '../utils/format'
 
 
 const styles = theme => ({
@@ -72,8 +73,8 @@ function SimpleTable(props) {
               <TableRow>
                 <TableCell>{n.rank}</TableCell>
                 <TableCell>{n.name} ({n.symbol})</TableCell>
-                <TableCell>{n.circulating_supply}</TableCell>
-                <TableCell>{n.price.toFixed(2)}</TableCell>
+                <TableCell>{format.numberWithCommas(n.circulating_supply)}</TableCell>
+                <TableCell>{format.numberWithCommas(n.price.toFixed(2))}</TableCell>
                 <TableCell>
                 <TextField
                   id="number"
@@ -87,7 +88,7 @@ function SimpleTable(props) {
                   margin="normal"
                 />
                 </TableCell>
-                <TableCell>{(props.portfolio[n.symbol] * n.price).toFixed(2)}</TableCell>
+                <TableCell>{format.numberWithCommas((props.portfolio[n.symbol] * n.price).toFixed(2))}</TableCell>
               </TableRow>
             );
           })}
@@ -98,7 +99,7 @@ function SimpleTable(props) {
             <TableCell></TableCell>
             <TableCell></TableCell>
             <TableCell variant='footer'>
-               <h3>{props.totalValue}</h3>
+               <h3>{format.numberWithCommas(props.totalValue)}</h3>
             </TableCell>
           </TableRow>
         </TableBody>
